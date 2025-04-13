@@ -1,37 +1,49 @@
 const mineflayer = require('mineflayer');
+const mc = require('minecraft-protocol');
+const SERVER_HOST = 'JINGALALAHUHU_S1.aternos.me';
+const SERVER_PORT = 46005;
+const USERNAME = 'serverbot3270';
+const PASSWORD = '123456';
 
-const bot = mineflayer.createBot({
-  host: 'JINGALALAHUHU_S1.aternos.me', // IP without spaces
-  port: 46005,
-  username: 'JingaGuard1', // Bot username
-  version: false           // Auto detect Minecraft version
-});
+function startBot() {
+  const bot = mineflayer.createBot({
+    host: SERVER_HOST,
+    port: SERVER_PORT,
+    username: USERNAME,
+    version: false
+  });
 
-const PASSWORD = '123456'; // Set any password here
+  bot.on('spawn', () => {
+    console.log('✅ Bot spawn ho gaya!');
+    setTimeout(() => {
+      bot.chat(`/login ${PASSWORD}`);
+    }, 5000);
 
-bot.on('spawn', () => {
-  console.log('✅ Bot spawn ho gaya!');
+    setInterval(() => {
+      bot.chat('JingaGuard1 is still online 😎');
+    }, 60000);
+  });
 
-  // Send register/login after few seconds
-  setTimeout(() => {
-    bot.chat(`/register ${PASSWORD} ${PASSWORD}`);
-    bot.chat(`/login ${PASSWORD}`);
-    console.log('🔐 Register/Login command bhej diya.');
-  }, 5000);
+  bot.on('error', (err) => {
+    console.log('❌ Error:', err);
+  });
 
-  // Keep alive message every 1 min
-  setInterval(() => {
-    bot.chat('JingaGuard1 is still online 😎');
-  }, 60000);
-});
+  bot.on('end', () => {
+    console.log('🔁 Disconnected! Reconnecting in 15 sec...');
+    setTimeout(() => checkServerAndReconnect(), 15000);
+  });
+}
 
-bot.on('error', err => {
-  console.log('❌ Error:', err);
-});
+function checkServerAndReconnect() {
+  mc.ping({ host: SERVER_HOST, port: SERVER_PORT }, (err, res) => {
+    if (err) {
+      console.log('🕒 Server offline ya start nahi hua... Wait kar rahe hain.');
+      setTimeout(() => checkServerAndReconnect(), 15000);
+    } else {
+      console.log('🟢 Server online mil gaya! Bot connect ho raha hai...');
+      startBot();
+    }
+  });
+}
 
-bot.on('end', () => {
-  console.log('🔁 Disconnected! Reconnecting in 5 sec...');
-  setTimeout(() => {
-    process.exit(); // Railway auto restarts the bot
-  }, 5000);
-});
+checkServerAndReconnect();
