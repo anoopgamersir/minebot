@@ -1,14 +1,12 @@
 {
-  "name": "minecraft-bot",
+  "name": "minebot",
   "version": "1.0.0",
-  "description": "24/7 Minecraft Bot for Aternos",
+  "description": "24/7 Minecraft bot for Aternos",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "mineflayer": "^4.12.0",
-    "mineflayer-auto-auth": "^1.2.0",
-    "mineflayer-pathfinder": "^2.3.0"
+    "mineflayer": "^4.12.0"
   }
 }
