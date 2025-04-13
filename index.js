@@ -1,34 +1,42 @@
 const mineflayer = require('mineflayer');
+const autoAuth = require('mineflayer-auto-auth');
 
 function createBot() {
   const bot = mineflayer.createBot({
-    host: process.env.MC_HOST || 'JINGALALAHUHU_S1.aternos.me',
-    port: parseInt(process.env.MC_PORT) || 46005,
-    username: process.env.BOT_USERNAME || 'JingaGuard',
-    auth: 'offline',
+    host: 'JINGALALAHUHU_S1.aternos.me', // 🔁 Replace with your server IP
+    port: 46005,                         // 🔁 Replace with your server port
+    username: 'JingaGuard',             // 🔁 Replace with your bot name
+    version: '1.20.4',                  // 🔁 Replace with your Minecraft version
   });
 
-  bot.once('spawn', () => {
-    console.log('✅ Bot joined the server.');
+  // Auto login plugin
+  bot.loadPlugin(autoAuth.plugin);
 
-    // Agar server pe /register ya /login chahiye ho
-    bot.chat('/register 123456');
-    setTimeout(() => {
-      bot.chat('/login 123456');
-    }, 3000);
+  // Auto login config
+  bot.once('inject_allowed', () => {
+    bot.autoAuth = {
+      password: '123456', // 🔁 Your login password (if using login plugin)
+      logging: true,
+    };
   });
 
-  bot.on('kicked', (reason) => {
-    console.log('❌ Kicked:', reason);
+  // Chat events
+  bot.on('chat', (username, message) => {
+    if (username === bot.username) return;
+    if (message === 'hello') {
+      bot.chat(`Hi ${username}! I am online 24/7 🤖`);
+    }
   });
 
+  // Logging and reconnect logic
   bot.on('error', (err) => {
     console.log('⚠️ Error:', err);
+    bot.end();
   });
 
   bot.on('end', () => {
-    console.log('🔁 Reconnecting in 5 seconds...');
-    setTimeout(createBot, 5000);
+    console.log('🔁 Bot disconnected. Reconnecting in 10s...');
+    setTimeout(createBot, 10000);
   });
 }
 
