@@ -24,6 +24,16 @@ bot.on('spawn', () => {
   setInterval(() => {
     bot.chat('JingaGuard1 is still online 😎');
   }, 60000);
+
+  // Bot ko continuous movement karna
+  setInterval(() => {
+    if (bot.entity) {
+      bot.setControlState('forward', true); // Forward movement
+      setTimeout(() => {
+        bot.setControlState('forward', false); // Stop after 2 seconds
+      }, 2000);
+    }
+  }, 3000); // Move every 3 seconds
 });
 
 // Agar bot error throw kare, toh usko handle karna
