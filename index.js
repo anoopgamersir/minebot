@@ -2,8 +2,8 @@ const mineflayer = require('mineflayer');
 
 function createBot() {
   const bot = mineflayer.createBot({
-    host: 'JINGALALAHUHU_S1.aternos.me', // Replace with your server IP
-    port: 46005,                         // Replace with your server port
+    host: 'JINGALALAHUHU_S2.aternos.me', // Replace with your server IP
+    port: 42580,                         // Replace with your server port
     username: 'JingaGuard',              // Replace with your bot's username
     version: '1.20.4',                   // Replace with your server's Minecraft version
   });
